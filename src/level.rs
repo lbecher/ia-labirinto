@@ -23,8 +23,8 @@ pub fn spawn_level(
     let rows = maze.matrix.rows() as i32;
     let cols = maze.matrix.cols() as i32;
 
-    for i in (-rows * MAP_PADDING as i32)..(rows * (MAP_PADDING as i32 + 1)) {
-        for j in (-cols * MAP_PADDING as i32)..(cols * (MAP_PADDING as i32 + 1)) {
+    for i in (-MAP_PADDING as i32)..(rows + MAP_PADDING as i32) {
+        for j in (-MAP_PADDING as i32)..(cols + MAP_PADDING as i32) {
             let x = j as f32 * LEVEL_SPRITE_SIZE.0 * LEVEL_SPRITE_SCALE;
             let y_range = (cols as f32 * (MAP_PADDING + 1.0)) - (-cols as f32 * MAP_PADDING);
             let y =  y_range - (i as f32 * LEVEL_SPRITE_SIZE.1 * LEVEL_SPRITE_SCALE);
