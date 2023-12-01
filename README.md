@@ -1,6 +1,6 @@
 # ia-labirinto
 
-Trabalho de algoritmos de busca da disciplica de Inteligências Artificial.
+Trabalho de algoritmos de busca da disciplica de Inteligência Artificial.
 
 Alunos:
 * Luiz Fernando Becher de Araujo
