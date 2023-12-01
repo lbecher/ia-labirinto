@@ -7,7 +7,7 @@ use crate::{
 };
 
 //
-// Declara plugin do level
+// Declara plugin do nível
 //
 
 pub struct LevelPlugin;
