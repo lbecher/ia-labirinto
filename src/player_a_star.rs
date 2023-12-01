@@ -25,7 +25,7 @@ fn calculate_a_star(
 ) -> PyResult<(f64, Vec<(usize, usize)>)> {
     let a_star_code = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/python/limited_depth.py"
+        "/python/a_star.py"
     ));
 
     // Initialize Python in a thread-safe manner
@@ -43,11 +43,11 @@ fn calculate_a_star(
         let a_star_module = PyModule::from_code(
             py,
             a_star_code,
-            "python.limited_depth",
-            "python.limited_depth")?;
+            "python.a_star",
+            "python.a_star")?;
 
         let result: (f64, Vec<(usize, usize)>) = a_star_module
-            .getattr("calculate_limited_depth")?
+            .getattr("calculate_a_star")?
             .call((
                 vec_matrix,
                 matrix.rows(),
@@ -157,8 +157,7 @@ pub fn spawn_a_star_player(
             start_position,
         ) {
             Ok((time, path)) => {
-                let mut path = path;
-                path.reverse();
+                let path = path;
 
                 let text_style = TextStyle {
                     font: asset_server.load("fonts/FiraMono-Medium.ttf"),

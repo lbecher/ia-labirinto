@@ -1,10 +1,4 @@
-use bevy::{
-    /*core_pipeline::{
-        bloom::BloomSettings,
-        tonemapping::Tonemapping,
-    },*/
-    prelude::*,
-};
+use bevy::prelude::*;
 
 use crate::{
     constants::*,
@@ -41,14 +35,11 @@ fn camera_spawn(
     commands.spawn((
         Camera2dBundle {
             camera: Camera {
-                //hdr: true, // 1. HDR is required for bloom
                 ..default()
             },
             transform,
-            //tonemapping: Tonemapping::TonyMcMapface, // 2. Using a tonemapper that desaturates to white is recommended
             ..default()
         },
-        //BloomSettings::default(), // 3. Enable bloom for the camera
     ));
 }
 
