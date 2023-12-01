@@ -151,6 +151,12 @@ pub fn spawn_a_star_player(
     characters_sprite_sheet: Res<AmeliaSpriteSheet>,
 ) {
     if let Some(start_position) = maze.a_star_start {
+        let text_style = TextStyle {
+            font: asset_server.load("fonts/FiraMono-Medium.ttf"),
+            font_size: 18.0,
+            ..default()
+        };
+
         match calculate_a_star(
             &maze.matrix,
             &maze.exits,
@@ -158,12 +164,6 @@ pub fn spawn_a_star_player(
         ) {
             Ok((time, path)) => {
                 let path = path;
-
-                let text_style = TextStyle {
-                    font: asset_server.load("fonts/FiraMono-Medium.ttf"),
-                    font_size: 18.0,
-                    ..default()
-                };
 
                 let cols = maze.matrix.cols() as f32;
 
@@ -212,6 +212,19 @@ pub fn spawn_a_star_player(
             },
             Err(err) => {
                 eprintln!("{}", err);
+                commands.spawn(
+                    TextBundle::from_section(
+                        "Não foi possível inicializar o player Amelia\nA* (A Estrela)",
+                        text_style.clone(),
+                    )
+                    .with_text_alignment(TextAlignment::Left)
+                    .with_style(Style {
+                        position_type: PositionType::Absolute,
+                        top: Val::Px(10.0),
+                        left: Val::Px(10.0),
+                        ..default()
+                    }),
+                );
             }
         }
     }

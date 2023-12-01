@@ -151,6 +151,12 @@ pub fn spawn_limited_depth_player(
     characters_sprite_sheet: Res<BobSpriteSheet>,
 ) {
     if let Some(start_position) = maze.limited_depth_start {
+        let text_style = TextStyle {
+            font: asset_server.load("fonts/FiraMono-Medium.ttf"),
+            font_size: 18.0,
+            ..default()
+        };
+
         match calculate_limited_depth(
             &maze.matrix,
             &maze.exits,
@@ -159,12 +165,6 @@ pub fn spawn_limited_depth_player(
             Ok((time, path)) => {
                 let mut path = path;
                 path.reverse();
-
-                let text_style = TextStyle {
-                    font: asset_server.load("fonts/FiraMono-Medium.ttf"),
-                    font_size: 18.0,
-                    ..default()
-                };
 
                 let cols = maze.matrix.cols() as f32;
 
@@ -213,6 +213,19 @@ pub fn spawn_limited_depth_player(
             },
             Err(err) => {
                 eprintln!("{}", err);
+                commands.spawn(
+                    TextBundle::from_section(
+                        "Não foi possível inicializar o player Bob\nBusca em Profundidade Limitada",
+                        text_style.clone(),
+                    )
+                    .with_text_alignment(TextAlignment::Left)
+                    .with_style(Style {
+                        position_type: PositionType::Absolute,
+                        top: Val::Px(10.0),
+                        right: Val::Px(10.0),
+                        ..default()
+                    }),
+                );
             }
         }
     }
