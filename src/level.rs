@@ -33,7 +33,7 @@ pub fn spawn_level(
             let transform = Transform::from_translation(translation)
                 .with_scale(Vec3::new(LEVEL_SPRITE_SCALE, LEVEL_SPRITE_SCALE, LEVEL_SPRITE_SCALE));
 
-            if i >= 0 && i < rows && j >= 0 && j < rows {
+            if i >= 0 && i < rows && j >= 0 && j < cols {
                 match *maze.matrix.get(i as usize, j as usize).unwrap() {
                     0 => {
                         commands.spawn(SpriteSheetBundle {
