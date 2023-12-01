@@ -31,9 +31,9 @@ fn camera_spawn(
     let i = (rows - 1.0) / 2.0;
     let j = (cols - 1.0) / 2.0;
 
-    let x = j * TILE_SIZE * SCALE;
+    let x = j * LEVEL_SPRITE_SIZE.0 * LEVEL_SPRITE_SCALE;
     let y_range = (cols * (MAP_PADDING + 1.0)) - (-cols * MAP_PADDING);
-    let y =  y_range - (i * TILE_SIZE * SCALE);
+    let y =  y_range - (i * LEVEL_SPRITE_SIZE.1 * LEVEL_SPRITE_SCALE);
 
     let translation = Vec3::new(x, y, -10.0);
     let transform = Transform::from_translation(translation);

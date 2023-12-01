@@ -10,14 +10,13 @@ use bevy::{
     prelude::*,
     window::WindowTheme,
 };
-use bevy_rapier2d::prelude::*;
 
 use crate::{
     camera::CameraPlugin,
     constants::*,
     level::LevelPlugin,
     maze::MazePlugin,
-    //player_a_star::PlayerAStarPlugin,
+    player_a_star::AStarPlayerPlugin,
     player_limited_depth::LimitedDepthPlayerPlugin,
     sprites::SpritesPlugin,
 };
@@ -29,7 +28,7 @@ fn main() {
             .set(ImagePlugin::default_nearest())
             .set(WindowPlugin {
                 primary_window: Some(Window {
-                    title: "Primeiro Trabalho de IA".into(),
+                    title: "Profundidade Limitada X A Estrela".into(),
                     window_theme: Some(WindowTheme::Dark),
                     resolution: (WIDTH, HEIGHT).into(),
                     ..default()
@@ -37,12 +36,11 @@ fn main() {
                 ..default()
             })
         )
-        .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-        .add_plugins(RapierDebugRenderPlugin::default())
         .add_plugins(SpritesPlugin)
         .add_plugins(CameraPlugin)
         .add_plugins(MazePlugin)
         .add_plugins(LevelPlugin)
+        .add_plugins(AStarPlayerPlugin)
         .add_plugins(LimitedDepthPlayerPlugin)
         .run();
 }

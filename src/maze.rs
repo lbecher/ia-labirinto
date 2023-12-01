@@ -68,7 +68,7 @@ pub fn load_maze(
         let mut line_split = line.split_whitespace();
 
         for j in 0..cols {
-            let mut value = line_split
+            let value = line_split
                 .next()
                 .unwrap()
                 .parse::<u8>()

@@ -6,7 +6,7 @@ use simple_matrix::Matrix;
 use crate::{
     constants::*,
     maze::Maze,
-    sprites::CharactersSpriteSheet,
+    sprites::BobSpriteSheet,
 };
 
 pub struct LimitedDepthPlayerPlugin;
@@ -14,7 +14,8 @@ pub struct LimitedDepthPlayerPlugin;
 impl Plugin for LimitedDepthPlayerPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Startup, spawn_limited_depth_player);
+            .add_systems(Startup, spawn_limited_depth_player)
+            .add_systems(Update, movement_spawn_limited_depth_player);
     }
 }
 
@@ -60,10 +61,85 @@ fn calculate_limited_depth(
     })
 }
 
+pub enum LimitedDepthPlayerDirection {
+    Up,
+    Down,
+    Left,
+    Right,
+}
 
 #[derive(Component)]
 pub struct LimitedDepthPlayer {
     timer: Timer,
+    frame_offset: usize,
+    current_frame: usize,
+    first_frame: usize,
+    last_frame: usize,
+    direction: LimitedDepthPlayerDirection,
+}
+
+impl LimitedDepthPlayer {
+    pub fn new(timer: Timer) -> Self {
+        Self { 
+            timer,
+            frame_offset: 6,
+            current_frame: 0, 
+            first_frame: 0, 
+            last_frame: 5,
+            direction: LimitedDepthPlayerDirection::Down,
+        }
+    }
+
+    pub fn get_current_frame(&self) -> usize {
+        self.current_frame + self.frame_offset
+    }
+
+    pub fn update_sprite(&mut self, time: &Time) {
+        self.timer.tick(time.delta());
+        if self.timer.just_finished() {
+            self.current_frame = if self.current_frame == self.last_frame {
+                self.first_frame
+            } else {
+                self.current_frame + 1
+            };
+        }
+    }
+
+    pub fn update_animation(&mut self, velocity: Vec2) {
+        if velocity == Vec2::ZERO {
+            self.frame_offset = 0;
+        } else {
+            self.frame_offset = 24;
+
+            if velocity.x > 0.0 {
+                self.direction = LimitedDepthPlayerDirection::Right;
+            }
+            else if velocity.x < 0.0 {
+                self.direction = LimitedDepthPlayerDirection::Left;
+            }
+            else if velocity.y > 0.0 {
+                self.direction = LimitedDepthPlayerDirection::Down;
+            }
+            else {
+                self.direction = LimitedDepthPlayerDirection::Up;
+            }
+        }
+
+        match self.direction {
+            LimitedDepthPlayerDirection::Up => {
+                self.frame_offset += 18;
+            }
+            LimitedDepthPlayerDirection::Down => {
+                self.frame_offset += 6;
+            }
+            LimitedDepthPlayerDirection::Left => {
+                self.frame_offset += 12;
+            }
+            LimitedDepthPlayerDirection::Right => {
+                self.frame_offset += 0;
+            }
+        };
+    }
 }
 
 
@@ -71,7 +147,7 @@ pub fn spawn_limited_depth_player(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     maze: Res<Maze>,
-    characters_sprite_sheet: Res<CharactersSpriteSheet>,
+    characters_sprite_sheet: Res<BobSpriteSheet>,
 ) {
     if let Some(start_position) = maze.limited_depth_start {
         match calculate_limited_depth(
@@ -86,24 +162,23 @@ pub fn spawn_limited_depth_player(
                     ..default()
                 };
 
-                let rows = maze.matrix.rows() as f32;
                 let cols = maze.matrix.cols() as f32;
 
-                let i = (rows - 1.0) / 2.0;
-                let j = (cols - 1.0) / 2.0;
+                let i = start_position.0 as f32;
+                let j = start_position.1 as f32;
 
-                let x = j * TILE_SIZE * SCALE;
+                let x = j * PLAYER_SPRITE_SIZE.0 * PLAYER_SPRITE_SCALE * (PLAYER_SPRITE_SIZE.1 / PLAYER_SPRITE_SIZE.0);
                 let y_range = (cols * (MAP_PADDING + 1.0)) - (-cols * MAP_PADDING);
-                let y =  y_range - (i * TILE_SIZE * SCALE);
+                let y =  y_range - (i * PLAYER_SPRITE_SIZE.1 * PLAYER_SPRITE_SCALE);
 
-                let translation = Vec3::new(x, y, -10.0);
+                let translation = Vec3::new(x, y, 0.0);
                 let transform = Transform::from_translation(translation)
-                    .with_scale(Vec3::new(SCALE, SCALE, SCALE));
+                    .with_scale(Vec3::new(PLAYER_SPRITE_SCALE, PLAYER_SPRITE_SCALE, PLAYER_SPRITE_SCALE));
 
                 commands.spawn(
                     TextBundle::from_section(
                         format!(
-                            "Bob Gótico dos Santos\nBusca em Profundidade Limitada\nTempo de Processamento: {} ms\nTamanho da Solução: {}",
+                            "Bob Cinza dos Santos\nBusca em Profundidade Limitada\nTempo de Processamento: {} ms\nTamanho da Solução: {}",
                             time / 1_000_000.0,
                             path.len(),
                         ),
@@ -118,9 +193,8 @@ pub fn spawn_limited_depth_player(
                     }),
                 );
 
-                let player = LimitedDepthPlayer {
-                    timer: Timer::from_seconds(0.1, TimerMode::Repeating),
-                };
+                let player = LimitedDepthPlayer::new(
+                    Timer::from_seconds(0.1, TimerMode::Repeating));
 
                 commands.spawn((
                     player,
@@ -137,4 +211,39 @@ pub fn spawn_limited_depth_player(
             }
         }
     }
+}
+
+fn movement_spawn_limited_depth_player(
+    time: Res<Time>,
+    input: Res<Input<KeyCode>>,
+    mut query: Query<(&mut LimitedDepthPlayer, &mut TextureAtlasSprite, &mut Transform)>,
+) {
+    let (mut player, mut texture_atlas_sprite, mut transform) = query.single_mut();
+
+    let mut velocity = Vec2::ZERO;
+
+    if input.pressed(KeyCode::Left) || input.pressed(KeyCode::A) {
+        velocity.x -= 1.0;
+    }
+    if input.pressed(KeyCode::Right) || input.pressed(KeyCode::D) {
+        velocity.x += 1.0;
+    }
+
+    if input.pressed(KeyCode::Down) || input.pressed(KeyCode::S) {
+        velocity.y -= 1.0;
+    }
+    if input.pressed(KeyCode::Up) || input.pressed(KeyCode::W) {
+        velocity.y += 1.0;
+    }
+
+    if velocity != Vec2::ZERO {
+        velocity = velocity.normalize();
+
+        transform.translation.x += velocity.x * SPEED;
+        transform.translation.y += velocity.y * SPEED;
+    }
+
+    player.update_animation(velocity);
+    player.update_sprite(&time);
+    texture_atlas_sprite.index = player.get_current_frame();
 }
