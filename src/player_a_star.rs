@@ -181,7 +181,7 @@ pub fn spawn_a_star_player(
                 commands.spawn(
                     TextBundle::from_section(
                         format!(
-                            "Amelia Amarela de Oliveira\nA* (A Estrela)\nTempo de Processamento: {} ms\nTamanho da Solução: {}",
+                            "Amelia Rosa de Oliveira\nA* (A Estrela)\nTempo de Processamento: {} ms\nTamanho da Solução: {}",
                             time / 1_000_000.0,
                             path.len(),
                         ),
