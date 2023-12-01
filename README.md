@@ -17,9 +17,9 @@ cargo run
 
 ## Personalização do labirinto
 
-O labirinto, representado por uma matriz de inteiros, pode ter qualquer tamanho, desde que respeite a representação inteira utilizada pelo Python (ou seja, 2147483648 por 2147483648). Além disso, o tamanho do labirinto deve respeitar a capacidade de memória da sua máquina. O tamanho do labirinto deve ser declarado na primeira linha, no formato linha coluna.
+O labirinto, representado por uma matriz de inteiros, pode ter qualquer tamanho, desde que respeite a representação inteira utilizada pelo Python (ou seja, 2147483648 por 2147483648). Além disso, o tamanho do labirinto deve respeitar a capacidade de memória da sua máquina. O tamanho do labirinto deve ser declarado na primeira linha do arquivo, no formato linha coluna.
 
-A matriz é baseada na representação matricial de grafos, onde as paredes do labirinto (nodos desconexos) são representadas por 0, enquanto um caminho possível é representado por 1. Extendendo essa representação para adicionar algumas informações extras, temos:
+A matriz do labirinto é baseada na representação matricial de grafos, onde as paredes do labirinto (nodos desconexos) são representadas por 0, enquanto um caminho possível é representado por 1. Extendendo essa representação para adicionar algumas informações extras, temos:
 
 * 2: representa uma saída do labirinto;
 * 3: representa a posição inicial do player Amelia (A*);
@@ -27,6 +27,8 @@ A matriz é baseada na representação matricial de grafos, onde as paredes do l
 * 5: representa a mesma posição inicial tanto para Amelia quanto para Bob.
 
 Vale resaltar que, no código dos algoritmos de busca, as posições inicias dos players também são consideradas como nós válidos (equivalente a 1).
+
+O labirinto é lido do arquivo `maze.txt`.
 
 ### Exemplo 1
 
