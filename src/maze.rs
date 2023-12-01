@@ -60,7 +60,7 @@ pub fn load_maze(
     let mut limited_depth_start: Option<(usize, usize)> = None;
 
     //
-    // Lê o arquivo
+    // Lê o arquivo na matriz e as outras informações do labirinto
     //
 
     for i in 0..rows {
@@ -88,6 +88,10 @@ pub fn load_maze(
             matrix.set(i, j, value);
         }
     }
+
+    //
+    // Instancia a estrutura de dados Maze como um recurso da Bevy
+    //
 
     commands.insert_resource(Maze {
         matrix,

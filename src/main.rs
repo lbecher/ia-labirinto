@@ -51,6 +51,9 @@ fn main() {
         .run();
 }
 
+//
+// Spawna texto explicando os controles
+//
 
 fn controls_text(
     mut commands: Commands,

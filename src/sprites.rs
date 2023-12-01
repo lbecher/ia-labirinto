@@ -2,6 +2,10 @@ use bevy::prelude::*;
 
 use crate::constants::*;
 
+//
+// Declara plugin que carrega as sprites
+//
+
 pub struct SpritesPlugin;
 
 impl Plugin for SpritesPlugin {
@@ -12,6 +16,10 @@ impl Plugin for SpritesPlugin {
             .add_systems(PreStartup, load_bob_sprite_sheet);
     }
 }
+
+//
+// Carrega a sprite sheet do nível como recurso da Bevy
+//
 
 #[derive(Resource)]
 pub struct LevelSpriteSheet(pub Handle<TextureAtlas>);
@@ -33,6 +41,10 @@ fn load_level_sprite_sheet(
     commands.insert_resource(LevelSpriteSheet(texture_atlas_handle));
 }
 
+//
+// Carrega a sprite sheet da Amalia como recurso da Bevy
+//
+
 #[derive(Resource)]
 pub struct AmeliaSpriteSheet(pub Handle<TextureAtlas>);
 
@@ -52,6 +64,10 @@ fn load_amelia_sprite_sheet(
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
     commands.insert_resource(AmeliaSpriteSheet(texture_atlas_handle));
 }
+
+//
+// Carrega a sprite sheet do Bob como recurso da Bevy
+//
 
 #[derive(Resource)]
 pub struct BobSpriteSheet(pub Handle<TextureAtlas>);
