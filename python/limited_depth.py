@@ -59,7 +59,7 @@ def calculate_limited_depth(matrix, rows, cols, exits, limited_depth_start):
     saidas = exits
     posicao_inicial = limited_depth_start
 
-    limite = 20
+    limite = 40
 
     inicio = time.time_ns()
     caminho = busca_profundidade_limitada(labirinto, posicao_inicial, limite)
