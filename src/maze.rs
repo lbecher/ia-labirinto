@@ -39,11 +39,13 @@ pub fn load_maze(
 
     let first_line = lines.next().unwrap().unwrap();
     let mut first_line_split = first_line.split_whitespace();
+    // decodifica string lida no maior inteiro não sinalizado
     let rows = first_line_split
         .next()
         .unwrap()
         .parse::<usize>()
         .unwrap();
+    // decodifica string lida no maior inteiro não sinalizado
     let cols = first_line_split
         .next()
         .unwrap()
@@ -68,12 +70,14 @@ pub fn load_maze(
         let mut line_split = line.split_whitespace();
 
         for j in 0..cols {
+            // decodifica string lida em inteiro não sinalizado de 8 bits
             let value = line_split
                 .next()
                 .unwrap()
                 .parse::<u8>()
                 .unwrap();
 
+            // armazena informações de players e saídas
             if value == 2 {
                 exits.push((i, j))
             } else if value == 3 {
@@ -85,6 +89,7 @@ pub fn load_maze(
                 limited_depth_start = Some((i, j));
             }
 
+            // grava leitura na na matriz
             matrix.set(i, j, value);
         }
     }
