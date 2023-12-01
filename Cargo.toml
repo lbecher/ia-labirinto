@@ -10,9 +10,7 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-#bevy = { version = "0.12.0" }
 bevy = { version = "0.12.0", features = ["dynamic_linking"] }
 bevy_egui = { version = "0.23.0" }
-#bevy_rapier2d = { version = "0.23.0", features = ["simd-stable"] }
 pyo3 = { version = "0.20.0" }
 simple-matrix = { version = "0.1.2" }

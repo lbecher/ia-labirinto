@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-//use bevy_rapier2d::prelude::*;
 use pyo3::prelude::*;
 use simple_matrix::Matrix;
 
@@ -15,7 +14,7 @@ impl Plugin for LimitedDepthPlayerPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_systems(Startup, spawn_limited_depth_player)
-            .add_systems(Update, movement_spawn_limited_depth_player);
+            .add_systems(Update, movement_limited_depth_player);
     }
 }
 
@@ -70,6 +69,7 @@ pub enum LimitedDepthPlayerDirection {
 
 #[derive(Component)]
 pub struct LimitedDepthPlayer {
+    path: Vec<(usize, usize)>,
     timer: Timer,
     frame_offset: usize,
     current_frame: usize,
@@ -79,8 +79,9 @@ pub struct LimitedDepthPlayer {
 }
 
 impl LimitedDepthPlayer {
-    pub fn new(timer: Timer) -> Self {
+    pub fn new(path: Vec<(usize, usize)>, timer: Timer) -> Self {
         Self { 
+            path,
             timer,
             frame_offset: 6,
             current_frame: 0, 
@@ -156,6 +157,9 @@ pub fn spawn_limited_depth_player(
             start_position,
         ) {
             Ok((time, path)) => {
+                let mut path = path;
+                path.reverse();
+
                 let text_style = TextStyle {
                     font: asset_server.load("fonts/FiraMono-Medium.ttf"),
                     font_size: 18.0,
@@ -194,6 +198,7 @@ pub fn spawn_limited_depth_player(
                 );
 
                 let player = LimitedDepthPlayer::new(
+                    path,
                     Timer::from_seconds(0.1, TimerMode::Repeating));
 
                 commands.spawn((
@@ -213,37 +218,57 @@ pub fn spawn_limited_depth_player(
     }
 }
 
-fn movement_spawn_limited_depth_player(
+fn movement_limited_depth_player(
     time: Res<Time>,
-    input: Res<Input<KeyCode>>,
-    mut query: Query<(&mut LimitedDepthPlayer, &mut TextureAtlasSprite, &mut Transform)>,
+    maze: Res<Maze>,
+    mut query: Query<(
+        &mut LimitedDepthPlayer,
+        &mut TextureAtlasSprite,
+        &mut Transform,
+    )>,
 ) {
-    let (mut player, mut texture_atlas_sprite, mut transform) = query.single_mut();
+    if let Ok((
+        mut player,
+        mut texture_atlas_sprite,
+        mut transform,
+    )) = query.get_single_mut() {
+        let path_len = player.path.len();
 
-    let mut velocity = Vec2::ZERO;
+        let mut velocity = Vec2::ZERO;
 
-    if input.pressed(KeyCode::Left) || input.pressed(KeyCode::A) {
-        velocity.x -= 1.0;
+        if path_len > 0 {
+            let (i, j) = player.path[path_len - 1];
+
+            let cols = maze.matrix.cols() as f32;
+
+            let next_x = j as f32 * PLAYER_SPRITE_SIZE.0 * PLAYER_SPRITE_SCALE * (PLAYER_SPRITE_SIZE.1 / PLAYER_SPRITE_SIZE.0);
+            let y_range = (cols * (MAP_PADDING + 1.0)) - (-cols * MAP_PADDING);
+            let next_y =  y_range - (i as f32 * PLAYER_SPRITE_SIZE.1 * PLAYER_SPRITE_SCALE);
+
+            let x_difference = next_x - transform.translation.x;
+            let y_difference = next_y - transform.translation.y;
+
+            if x_difference.abs() > 0.0 {
+                velocity.x = x_difference / x_difference.abs();
+            }
+            if y_difference.abs() > 0.0 {
+                velocity.y = y_difference / y_difference.abs();
+            }
+
+            if x_difference.abs() < SPEED && y_difference.abs() < SPEED {
+                player.path.pop();
+                transform.translation.x = next_x;
+                transform.translation.y = next_y;
+            }
+            else {
+                velocity = velocity.normalize();
+                transform.translation.x += SPEED * velocity.x;
+                transform.translation.y += SPEED * velocity.y;
+            }
+        }
+
+        player.update_animation(velocity);
+        player.update_sprite(&time);
+        texture_atlas_sprite.index = player.get_current_frame();
     }
-    if input.pressed(KeyCode::Right) || input.pressed(KeyCode::D) {
-        velocity.x += 1.0;
-    }
-
-    if input.pressed(KeyCode::Down) || input.pressed(KeyCode::S) {
-        velocity.y -= 1.0;
-    }
-    if input.pressed(KeyCode::Up) || input.pressed(KeyCode::W) {
-        velocity.y += 1.0;
-    }
-
-    if velocity != Vec2::ZERO {
-        velocity = velocity.normalize();
-
-        transform.translation.x += velocity.x * SPEED;
-        transform.translation.y += velocity.y * SPEED;
-    }
-
-    player.update_animation(velocity);
-    player.update_sprite(&time);
-    texture_atlas_sprite.index = player.get_current_frame();
 }
