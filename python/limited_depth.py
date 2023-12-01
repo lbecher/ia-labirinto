@@ -20,9 +20,20 @@ def busca_profundidade_limitada(labirinto, posicao_atual, limite, caminho_atual=
     # Passa o labirinto como parâmetro para a função obter_vizinhos
     vizinhos = obter_vizinhos(labirinto, posicao_atual)
     for vizinho in vizinhos:
+        if labirinto[vizinho[0]][vizinho[1]] == 0 or vizinho in visitadas:
+            continue  # Ignora paredes e posições já visitadas
+
+        # Adiciona o vizinho ao caminho atual
+        caminho_atual.append(vizinho)
+
         resultado = busca_profundidade_limitada(labirinto, vizinho, limite - 1, caminho_atual, visitadas)
+
+        # Se encontrou um caminho, retorna o resultado
         if resultado:
             return resultado
+
+    # Se nenhum caminho foi encontrado, remove o último movimento do caminho atual
+    caminho_atual.pop()
 
     # Se nenhum caminho foi encontrado, remove a posição atual das visitadas
     visitadas.remove(posicao_atual)
