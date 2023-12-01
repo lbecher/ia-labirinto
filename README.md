@@ -39,6 +39,21 @@ O labirinto é lido do arquivo `maze.txt`.
 0 0 5 0
 ```
 
+### Exemplo 2
+```
+10 10
+0 0 2 0 0 0 0 0 0 0
+0 0 1 0 0 0 0 1 0 0
+0 0 1 1 0 0 0 1 0 0
+0 0 0 1 1 1 1 1 1 0
+0 0 0 1 0 1 0 0 0 0 
+0 0 1 1 0 0 0 0 0 0
+0 0 1 0 0 0 0 1 1 2
+0 0 1 1 0 0 0 1 0 0
+0 0 0 1 1 1 1 1 1 0
+0 0 0 3 0 4 0 0 0 0
+```
+
 ## Instalação de dependências para Debian/Ubuntu/Linux Mint
 
 Na pasta raiz do projeto (que contém o arquivo `install-debian-dependencies.sh`), execute os comandos:
