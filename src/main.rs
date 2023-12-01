@@ -8,12 +8,15 @@ mod sprites;
 
 use bevy::{
     prelude::*,
-    window::WindowTheme,
+    window::{
+        WindowMode,
+        WindowTheme,
+    },
 };
 
 use crate::{
     camera::CameraPlugin,
-    constants::*,
+    //constants::*,
     level::LevelPlugin,
     maze::MazePlugin,
     player_a_star::AStarPlayerPlugin,
@@ -30,12 +33,15 @@ fn main() {
                 primary_window: Some(Window {
                     title: "Profundidade Limitada X A Estrela".into(),
                     window_theme: Some(WindowTheme::Dark),
-                    resolution: (WIDTH, HEIGHT).into(),
+                    mode: WindowMode::BorderlessFullscreen,
+                    //resolution: (WIDTH, HEIGHT).into(),
+                    resizable: false,
                     ..default()
                 }),
                 ..default()
             })
         )
+        .add_systems(Startup, controls_text)
         .add_plugins(SpritesPlugin)
         .add_plugins(CameraPlugin)
         .add_plugins(MazePlugin)
@@ -43,4 +49,30 @@ fn main() {
         .add_plugins(AStarPlayerPlugin)
         .add_plugins(LimitedDepthPlayerPlugin)
         .run();
+}
+
+
+fn controls_text(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
+    let text_style = TextStyle {
+        font: asset_server.load("fonts/FiraMono-Medium.ttf"),
+        font_size: 18.0,
+        ..default()
+    };
+
+    commands.spawn(
+        TextBundle::from_section(
+            "Controles:\n - Movimentar a câmera: setas ou WASD\n - Sair da aplicação: Alt + F4",
+            text_style.clone(),
+        )
+        .with_text_alignment(TextAlignment::Left)
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            bottom: Val::Px(10.0),
+            left: Val::Px(10.0),
+            ..default()
+        }),
+    );
 }

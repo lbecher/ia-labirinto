@@ -1,5 +1,5 @@
-pub const WIDTH: f32 = 800.0;
-pub const HEIGHT: f32 = 650.0;
+//pub const WIDTH: f32 = 800.0;
+//pub const HEIGHT: f32 = 650.0;
 
 pub const MAP_PADDING: f32 = 10.0;
 

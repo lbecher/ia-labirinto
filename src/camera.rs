@@ -77,7 +77,7 @@ fn camera_movement(
     if velocity != Vec2::ZERO {
         velocity = velocity.normalize();
 
-        transform.translation.x += velocity.x * SPEED;
-        transform.translation.y += velocity.y * SPEED;
+        transform.translation.x += velocity.x * SPEED * 2.0;
+        transform.translation.y += velocity.y * SPEED * 2.0;
     }
 }
