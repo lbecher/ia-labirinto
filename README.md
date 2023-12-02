@@ -39,8 +39,8 @@ O labirinto é lido do arquivo `maze.txt`.
 ```
 3 4
 0 2 0 0
-0 1 1 0
-0 0 5 0
+0 1 1 4
+0 0 3 0
 ```
 
 ### Exemplo 2
