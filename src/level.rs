@@ -57,7 +57,7 @@ pub fn spawn_level(
                             ..default()
                         });
                     },
-                    // se 2, spawna textura no index 22 (chão) + uma chave (99)
+                    // se 2, spawna textura no index 22 (chão) + um baú (84)
                     2 => {
                         commands.spawn(SpriteSheetBundle {
                             texture_atlas: level_sprite_sheet.0.to_owned(),
@@ -69,7 +69,7 @@ pub fn spawn_level(
                         transform.translation.z = -9.0;
                         commands.spawn(SpriteSheetBundle {
                             texture_atlas: level_sprite_sheet.0.to_owned(),
-                            sprite: TextureAtlasSprite::new(99),
+                            sprite: TextureAtlasSprite::new(84),
                             transform,
                             ..default()
                         });
