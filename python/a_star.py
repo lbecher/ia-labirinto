@@ -35,7 +35,6 @@ def a_Star_(maze_matrix, end_i, end_j, player2_i, player2_j):
     end_maze = AStarNode(position=(end_i, end_j))
 
     player_astar.g = 0
-    # formula para calcular a distancia Manhattan
     player_astar.h = abs(player_astar.position[0] - end_maze.position[0]) + abs(player_astar.position[1] - end_maze.position[1])
     player_astar.f = player_astar.g + player_astar.h
 
