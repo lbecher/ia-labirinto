@@ -1,0 +1,11 @@
+Regras de padronição para a matriz:
+Primeiro numero de linhas e colunas;
+Valores da matriz, separados por espaço.
+Exemplo:
+5 5
+0 3 0 4 0
+0 1 1 1 0 
+0 1 0 1 0
+0 1 1 1 0
+0 0 2 0 0
+Observação, a saida e os jogadores podem estar em qualquer lugar da matriz, desde que seja possivel que os jogadores chegem ao final do labirinto.
