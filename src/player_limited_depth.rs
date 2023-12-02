@@ -172,7 +172,7 @@ pub fn spawn_limited_depth_player(
                 let j = start_position.1 as f32;
 
                 let x = j * PLAYER_SPRITE_SIZE.0 * PLAYER_SPRITE_SCALE * (PLAYER_SPRITE_SIZE.1 / PLAYER_SPRITE_SIZE.0);
-                let y_range = (cols * (MAP_PADDING + 1.0)) - (-cols * MAP_PADDING);
+                let y_range = (cols * (LEVEL_MARGIN + 1.0)) - (-cols * LEVEL_MARGIN);
                 let y =  y_range - (i * PLAYER_SPRITE_SIZE.1 * PLAYER_SPRITE_SCALE);
 
                 let translation = Vec3::new(x, y, 0.0);
@@ -255,7 +255,7 @@ fn movement_limited_depth_player(
             let cols = maze.matrix.cols() as f32;
 
             let next_x = j as f32 * PLAYER_SPRITE_SIZE.0 * PLAYER_SPRITE_SCALE * (PLAYER_SPRITE_SIZE.1 / PLAYER_SPRITE_SIZE.0);
-            let y_range = (cols * (MAP_PADDING + 1.0)) - (-cols * MAP_PADDING);
+            let y_range = (cols * (LEVEL_MARGIN + 1.0)) - (-cols * LEVEL_MARGIN);
             let next_y =  y_range - (i as f32 * PLAYER_SPRITE_SIZE.1 * PLAYER_SPRITE_SCALE);
 
             let x_difference = next_x - transform.translation.x;

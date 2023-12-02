@@ -28,7 +28,7 @@ fn camera_spawn(
     let j = (cols - 1.0) / 2.0;
 
     let x = j * LEVEL_SPRITE_SIZE.0 * LEVEL_SPRITE_SCALE;
-    let y_range = (cols * (MAP_PADDING + 1.0)) - (-cols * MAP_PADDING);
+    let y_range = (cols * (LEVEL_MARGIN + 1.0)) - (-cols * LEVEL_MARGIN);
     let y =  y_range - (i * LEVEL_SPRITE_SIZE.1 * LEVEL_SPRITE_SCALE);
 
     let translation = Vec3::new(x, y, -10.0);
