@@ -3,6 +3,8 @@ use bevy::prelude::*;
 use crate::{
     constants::*,
     maze::Maze,
+    player_limited_depth::LimitedDepthPlayer,
+    player_a_star::AStarPlayer,
 };
 
 pub struct CameraPlugin;
@@ -45,30 +47,57 @@ fn camera_spawn(
 
 fn camera_movement(
     input: Res<Input<KeyCode>>,
-    mut transform_query: Query<&mut Transform, With<Camera>>,
+    a_star_query: Query<(&AStarPlayer, &Transform), Without<Camera>>,
+    limited_depth_query: Query<(&LimitedDepthPlayer, &Transform), Without<Camera>>,
+    mut camera_query: Query<(&Camera, &mut Transform)>,
 ) {
-    let mut transform = transform_query.single_mut();
+    let (_, mut camera_transform) = camera_query.single_mut();
 
-    let mut velocity = Vec2::ZERO;
+    let mut follow_player: Option<(f32, f32)> = None;
 
-    if input.pressed(KeyCode::Left) || input.pressed(KeyCode::A) {
-        velocity.x -= 1.0;
+    if input.pressed(KeyCode::Key1) {
+        if let Ok((_, a_star_transform)) = a_star_query.get_single() {
+            follow_player = Some((
+                a_star_transform.translation.x,
+                a_star_transform.translation.y,
+            ));
+        }
     }
-    if input.pressed(KeyCode::Right) || input.pressed(KeyCode::D) {
-        velocity.x += 1.0;
+    else if input.pressed(KeyCode::Key2) {
+        if let Ok((_, limilimited_depth_transform)) = limited_depth_query.get_single() {
+            follow_player = Some((
+                limilimited_depth_transform.translation.x,
+                limilimited_depth_transform.translation.y,
+            ));
+        }
     }
 
-    if input.pressed(KeyCode::Down) || input.pressed(KeyCode::S) {
-        velocity.y -= 1.0;
+    if let Some(translation) = follow_player {
+        camera_transform.translation.x = translation.0;
+        camera_transform.translation.y = translation.1;
     }
-    if input.pressed(KeyCode::Up) || input.pressed(KeyCode::W) {
-        velocity.y += 1.0;
-    }
+    else {
+        let mut velocity = Vec2::ZERO;
 
-    if velocity != Vec2::ZERO {
-        velocity = velocity.normalize();
+        if input.pressed(KeyCode::Left) || input.pressed(KeyCode::A) {
+            velocity.x -= 1.0;
+        }
+        if input.pressed(KeyCode::Right) || input.pressed(KeyCode::D) {
+            velocity.x += 1.0;
+        }
 
-        transform.translation.x += velocity.x * SPEED * 2.0;
-        transform.translation.y += velocity.y * SPEED * 2.0;
+        if input.pressed(KeyCode::Down) || input.pressed(KeyCode::S) {
+            velocity.y -= 1.0;
+        }
+        if input.pressed(KeyCode::Up) || input.pressed(KeyCode::W) {
+            velocity.y += 1.0;
+        }
+
+        if velocity != Vec2::ZERO {
+            velocity = velocity.normalize();
+
+            camera_transform.translation.x += velocity.x * SPEED * 2.0;
+            camera_transform.translation.y += velocity.y * SPEED * 2.0;
+        }
     }
 }
