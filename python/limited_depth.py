@@ -1,18 +1,19 @@
 import time
 
-def busca_profundidade_limitada(labirinto, posicao_atual, limite, caminho_atual=[], visitadas=set()):
+def busca_profundidade_limitada(labirinto, posicao_atual, limite, caminhos=[], caminho_atual=[], visitadas=set()):
     lin, col = posicao_atual
 
     if limite < 0:
-        return None  # Limite atingido, não há caminho
+        return caminhos  # Limite atingido, retorna a lista de caminhos atualizada
 
     if labirinto[lin][col] == 2:
-        # Encontrou a saída
+        # Encontrou a saída, adiciona o caminho atual à lista de caminhos
         caminho_atual.append(posicao_atual)
-        return caminho_atual
+        caminhos.append(caminho_atual.copy())
+        return caminhos
 
     if labirinto[lin][col] == 0 or posicao_atual in visitadas:
-        return None  # Parede ou posição já visitada
+        return caminhos  # Parede ou posição já visitada
 
     visitadas.add(posicao_atual)
     caminho_atual.append(posicao_atual)
@@ -23,21 +24,17 @@ def busca_profundidade_limitada(labirinto, posicao_atual, limite, caminho_atual=
         if labirinto[vizinho[0]][vizinho[1]] == 0 or vizinho in visitadas:
             continue  # Ignora paredes e posições já visitadas
 
-        # Adiciona o vizinho ao caminho atual
-        caminho_atual.append(vizinho)
+        resultado = busca_profundidade_limitada(labirinto, vizinho, limite - 1, caminhos, caminho_atual, visitadas)
 
-        resultado = busca_profundidade_limitada(labirinto, vizinho, limite - 1, caminho_atual, visitadas)
-
-        # Se encontrou um caminho, retorna o resultado
+        # Se encontrou um caminho, retorna os caminhos
         if resultado:
             return resultado
 
-    # Se nenhum caminho foi encontrado, remove o último movimento do caminho atual
+    # Se nenhum caminho foi encontrado, remove a posição atual das visitadas e do caminho
+    visitadas.remove(posicao_atual)
     caminho_atual.pop()
 
-    # Se nenhum caminho foi encontrado, remove a posição atual das visitadas
-    visitadas.remove(posicao_atual)
-    return None  # Caminho não encontrado neste ramo
+    return caminhos
 
 
 # Restante do código...
@@ -77,7 +74,7 @@ def calculate_limited_depth(matrix, rows, cols, exits, limited_depth_start):
     fim = time.time_ns()
     tempo = fim - inicio
 
-    return (tempo, caminho)
+    return (tempo, caminho[0])
 
 
 # Função de teste utilizada para validar o algoritmo
