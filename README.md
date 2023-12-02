@@ -69,3 +69,5 @@ chmod +x install-debian-dependencies.sh
 ```
 ./install-debian-dependencies.sh
 ```
+
+![Texto Alternativo](https://github.com/lbecher/ia-labirinto/blob/master/Trabalho_IA.png)
