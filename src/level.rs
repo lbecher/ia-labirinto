@@ -57,6 +57,23 @@ pub fn spawn_level(
                             ..default()
                         });
                     },
+                    // se 2, spawna textura no index 22 (chão) + uma chave (99)
+                    2 => {
+                        commands.spawn(SpriteSheetBundle {
+                            texture_atlas: level_sprite_sheet.0.to_owned(),
+                            sprite: TextureAtlasSprite::new(22),
+                            transform,
+                            ..default()
+                        });
+                        let mut transform = transform.clone();
+                        transform.translation.z = -9.0;
+                        commands.spawn(SpriteSheetBundle {
+                            texture_atlas: level_sprite_sheet.0.to_owned(),
+                            sprite: TextureAtlasSprite::new(99),
+                            transform,
+                            ..default()
+                        });
+                    },
                     // se qualquer outro número, spawna textura no index 22 (chão)
                     _ => {
                         commands.spawn(SpriteSheetBundle {

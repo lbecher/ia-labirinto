@@ -67,7 +67,7 @@ fn controls_text(
 
     commands.spawn(
         TextBundle::from_section(
-            "Controles:\n - Movimentar a câmera: setas ou WASD\n - Sair da aplicação: Alt + F4",
+            "Controles:\n - Movimentar a câmera: Setas ou WASD\n - Seguir a Amelia: Manter 1 pressionado\n - Seguir o Bob: Manter 2 pressionado\n - Sair da aplicação: Alt + F4",
             text_style.clone(),
         )
         .with_text_alignment(TextAlignment::Left)
