@@ -29,7 +29,7 @@ fn load_level_sprite_sheet(
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
-    let texture_handle: Handle<Image> = asset_server.load("sprites/dungeon.png");
+    let texture_handle: Handle<Image> = asset_server.load("sprites/level.png");
     let texture_atlas: TextureAtlas = TextureAtlas::from_grid(
         texture_handle, 
         Vec2::new(LEVEL_SPRITE_SIZE.0, LEVEL_SPRITE_SIZE.1), 

@@ -15,6 +15,10 @@ Na pasta raiz do projeto (que contém o arquivo `Cargo.toml`), execute o comando
 cargo run
 ```
 
+## Algoritmos de busca
+
+A implementação dos algoritmos de busca encontram-se no subdiretório `python`, tanto o A* quanto o profundidade limitada.
+
 ## Personalização do labirinto
 
 O labirinto, representado por uma matriz de inteiros, pode ter qualquer tamanho, desde que respeite a representação inteira utilizada pelo Python (ou seja, 2147483648 por 2147483648). Além disso, o tamanho do labirinto deve respeitar a capacidade de memória da sua máquina. O tamanho do labirinto deve ser declarado na primeira linha do arquivo, no formato linha coluna.
