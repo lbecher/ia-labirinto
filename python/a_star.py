@@ -21,6 +21,14 @@ def min_value(list):
 
     return min_value
 
+# No labirinto o A* não pode andar na diagonal, mas da pra andar a diagonal normamente
+def get_movement(teste_movimento):
+    if teste_movimento:
+        movement = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, -1), (-1, 1)]
+    else:
+        movement = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    return movement
+
 def a_Star_(maze_matrix, end_i, end_j, player2_i, player2_j):
     # posição inicial do player e final da matriz
     player_astar = AStarNode(position=(player2_i, player2_j))
@@ -38,12 +46,9 @@ def a_Star_(maze_matrix, end_i, end_j, player2_i, player2_j):
     # faça uma lista fechada vazia
     closed_list = []
     
-    # Exeção a regra do A* para que não se possa andar na diagonal no labirinto
-    teste_movimento = False
-    if teste_movimento == True:
-        movement = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, -1), (-1, 1)]
-    else:
-        movement = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    # Escolhe forma de percorer percorer os nós adjacentes
+    adjacency_choice = False
+    movement = get_movement(adjacency_choice)
 
     # enquanto o nó de destino não for alcançado
     while open_list:
