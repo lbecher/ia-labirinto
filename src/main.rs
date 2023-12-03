@@ -26,7 +26,7 @@ use crate::{
 
 fn main() {
     App::new()
-        .insert_resource(ClearColor(Color::BLACK))
+        .insert_resource(ClearColor(Color::from([0.145, 0.075, 0.102])))
         .add_plugins(DefaultPlugins
             .set(ImagePlugin::default_nearest())
             .set(WindowPlugin {
@@ -41,6 +41,7 @@ fn main() {
                 ..default()
             })
         )
+        .insert_resource(Msaa::Sample2)
         .add_systems(Startup, controls_text)
         .add_plugins(SpritesPlugin)
         .add_plugins(CameraPlugin)

@@ -34,7 +34,7 @@ fn load_level_sprite_sheet(
         texture_handle, 
         Vec2::new(LEVEL_SPRITE_SIZE.0, LEVEL_SPRITE_SIZE.1), 
         10, 
-        10, 
+        1, 
         None, 
         None);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);

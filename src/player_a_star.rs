@@ -8,6 +8,10 @@ use crate::{
     sprites::AmeliaSpriteSheet,
 };
 
+//
+// Declara plugin do player a star (Amelia)
+//
+
 pub struct AStarPlayerPlugin;
 
 impl Plugin for AStarPlayerPlugin {
@@ -18,47 +22,9 @@ impl Plugin for AStarPlayerPlugin {
     }
 }
 
-fn calculate_a_star(
-    matrix: &Matrix<u8>,
-    exits: &Vec<(usize, usize)>,
-    start_position: (usize, usize),
-) -> PyResult<(f64, Vec<(usize, usize)>)> {
-    let a_star_code = include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/python/a_star.py"
-    ));
-
-    // Initialize Python in a thread-safe manner
-    pyo3::prepare_freethreaded_python();
-
-    Python::with_gil(|py| {
-        let mut vec_matrix: Vec<Vec<u8>> = Vec::new();
-        for i in 0..matrix.rows() {
-            vec_matrix.push(Vec::new());
-            for j in 0..matrix.cols() {
-                vec_matrix[i].push(*matrix.get(i, j).unwrap());
-            }
-        }
-
-        let a_star_module = PyModule::from_code(
-            py,
-            a_star_code,
-            "python.a_star",
-            "python.a_star")?;
-
-        let result: (f64, Vec<(usize, usize)>) = a_star_module
-            .getattr("calculate_a_star")?
-            .call((
-                vec_matrix,
-                matrix.rows(),
-                matrix.cols(),
-                exits.to_vec(),
-                start_position,
-            ), None)?
-            .extract()?;
-        Ok(result)
-    })
-}
+//
+// "Classe" que lida com a animação do player
+//
 
 pub enum AStarPlayerDirection {
     Up,
@@ -143,6 +109,9 @@ impl AStarPlayer {
     }
 }
 
+//
+// Spawna o player na posição inicial
+//
 
 pub fn spawn_a_star_player(
     mut commands: Commands,
@@ -230,6 +199,10 @@ pub fn spawn_a_star_player(
     }
 }
 
+//
+// Movimenta o player com base no resultado do código Python
+//
+
 fn movement_a_star_player(
     time: Res<Time>,
     maze: Res<Maze>,
@@ -283,4 +256,49 @@ fn movement_a_star_player(
         player.update_sprite(&time);
         texture_atlas_sprite.index = player.get_current_frame();
     }
+}
+
+//
+// Calcula A* usando o código em Python
+//
+
+fn calculate_a_star(
+    matrix: &Matrix<u8>,
+    exits: &Vec<(usize, usize)>,
+    start_position: (usize, usize),
+) -> PyResult<(f64, Vec<(usize, usize)>)> {
+    let a_star_code = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/python/a_star.py"
+    ));
+
+    pyo3::prepare_freethreaded_python();
+
+    Python::with_gil(|py| {
+        let mut vec_matrix: Vec<Vec<u8>> = Vec::new();
+        for i in 0..matrix.rows() {
+            vec_matrix.push(Vec::new());
+            for j in 0..matrix.cols() {
+                vec_matrix[i].push(*matrix.get(i, j).unwrap());
+            }
+        }
+
+        let a_star_module = PyModule::from_code(
+            py,
+            a_star_code,
+            "python.a_star",
+            "python.a_star")?;
+
+        let result: (f64, Vec<(usize, usize)>) = a_star_module
+            .getattr("calculate_a_star")?
+            .call((
+                vec_matrix,
+                matrix.rows(),
+                matrix.cols(),
+                exits.to_vec(),
+                start_position,
+            ), None)?
+            .extract()?;
+        Ok(result)
+    })
 }

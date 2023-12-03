@@ -37,7 +37,7 @@ def busca_profundidade_limitada(labirinto, posicao_atual, limite, caminhos=[], c
     return caminhos
 
 
-# Restante do código...
+# obtém vizinhos através da posição atual do labirinto
 def obter_vizinhos(labirinto, posicao):
     lin, col = posicao
     vizinhos = []

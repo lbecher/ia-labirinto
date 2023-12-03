@@ -8,6 +8,10 @@ use crate::{
     sprites::BobSpriteSheet,
 };
 
+//
+// Declara plugin do player limited depth (Bob)
+//
+
 pub struct LimitedDepthPlayerPlugin;
 
 impl Plugin for LimitedDepthPlayerPlugin {
@@ -18,47 +22,9 @@ impl Plugin for LimitedDepthPlayerPlugin {
     }
 }
 
-fn calculate_limited_depth(
-    matrix: &Matrix<u8>,
-    exits: &Vec<(usize, usize)>,
-    start_position: (usize, usize),
-) -> PyResult<(f64, Vec<(usize, usize)>)> {
-    let limited_depth_code = include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/python/limited_depth.py"
-    ));
-
-    // Initialize Python in a thread-safe manner
-    pyo3::prepare_freethreaded_python();
-
-    Python::with_gil(|py| {
-        let mut vec_matrix: Vec<Vec<u8>> = Vec::new();
-        for i in 0..matrix.rows() {
-            vec_matrix.push(Vec::new());
-            for j in 0..matrix.cols() {
-                vec_matrix[i].push(*matrix.get(i, j).unwrap());
-            }
-        }
-
-        let limited_depth_module = PyModule::from_code(
-            py,
-            limited_depth_code,
-            "python.limited_depth",
-            "python.limited_depth")?;
-
-        let result: (f64, Vec<(usize, usize)>) = limited_depth_module
-            .getattr("calculate_limited_depth")?
-            .call((
-                vec_matrix,
-                matrix.rows(),
-                matrix.cols(),
-                exits.to_vec(),
-                start_position,
-            ), None)?
-            .extract()?;
-        Ok(result)
-    })
-}
+//
+// "Classe" que lida com a animação do player
+//
 
 pub enum LimitedDepthPlayerDirection {
     Up,
@@ -143,6 +109,9 @@ impl LimitedDepthPlayer {
     }
 }
 
+//
+// Spawna o player na posição inicial
+//
 
 pub fn spawn_limited_depth_player(
     mut commands: Commands,
@@ -231,6 +200,10 @@ pub fn spawn_limited_depth_player(
     }
 }
 
+//
+// Movimenta o player com base no resultado do código Python
+//
+
 fn movement_limited_depth_player(
     time: Res<Time>,
     maze: Res<Maze>,
@@ -284,4 +257,49 @@ fn movement_limited_depth_player(
         player.update_sprite(&time);
         texture_atlas_sprite.index = player.get_current_frame();
     }
+}
+
+//
+// Calcula busca em profundidade limitada usando o código em Python
+//
+
+fn calculate_limited_depth(
+    matrix: &Matrix<u8>,
+    exits: &Vec<(usize, usize)>,
+    start_position: (usize, usize),
+) -> PyResult<(f64, Vec<(usize, usize)>)> {
+    let limited_depth_code = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/python/limited_depth.py"
+    ));
+
+    pyo3::prepare_freethreaded_python();
+
+    Python::with_gil(|py| {
+        let mut vec_matrix: Vec<Vec<u8>> = Vec::new();
+        for i in 0..matrix.rows() {
+            vec_matrix.push(Vec::new());
+            for j in 0..matrix.cols() {
+                vec_matrix[i].push(*matrix.get(i, j).unwrap());
+            }
+        }
+
+        let limited_depth_module = PyModule::from_code(
+            py,
+            limited_depth_code,
+            "python.limited_depth",
+            "python.limited_depth")?;
+
+        let result: (f64, Vec<(usize, usize)>) = limited_depth_module
+            .getattr("calculate_limited_depth")?
+            .call((
+                vec_matrix,
+                matrix.rows(),
+                matrix.cols(),
+                exits.to_vec(),
+                start_position,
+            ), None)?
+            .extract()?;
+        Ok(result)
+    })
 }

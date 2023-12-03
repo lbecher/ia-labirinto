@@ -23,22 +23,17 @@ pub struct Maze {
 pub fn load_maze(
     mut commands: Commands,
 ) {
-    //
-    // Abre o arquivo maze.txt
-    //
-
+    // abre o arquivo maze.txt
     let path = "maze.txt";
     let file = File::open(path).expect("falha ao ler o arquivo maze.txt");
     let reader = io::BufReader::new(file);
-
+    
     let mut lines = reader.lines();
 
-    //
-    // Obtém quantidade de linhas e colunas
-    //
-
+    // obtém quantidade de linhas e colunas
     let first_line = lines.next().unwrap().unwrap();
     let mut first_line_split = first_line.split_whitespace();
+
     // decodifica string lida no maior inteiro não sinalizado
     let rows = first_line_split
         .next()
@@ -52,19 +47,13 @@ pub fn load_maze(
         .parse::<usize>()
         .unwrap();
 
-    //
-    // Inicializando atributos do labirinto
-    //
-
+    // inicializando atributos do labirinto
     let mut matrix: Matrix<u8> = Matrix::new(rows, cols);
     let mut exits: Vec<(usize, usize)> = Vec::new();
     let mut a_star_start: Option<(usize, usize)> = None;
     let mut limited_depth_start: Option<(usize, usize)> = None;
 
-    //
-    // Lê o arquivo na matriz e as outras informações do labirinto
-    //
-
+    // lê o arquivo na matriz e as outras informações do labirinto
     for i in 0..rows {
         let line: String = lines.next().unwrap().unwrap();
         let mut line_split = line.split_whitespace();
@@ -94,10 +83,7 @@ pub fn load_maze(
         }
     }
 
-    //
-    // Instancia a estrutura de dados Maze como um recurso da Bevy
-    //
-
+    // instancia a estrutura de dados Maze como um recurso da Bevy
     commands.insert_resource(Maze {
         matrix,
         exits,

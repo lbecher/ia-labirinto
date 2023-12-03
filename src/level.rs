@@ -32,8 +32,9 @@ pub fn spawn_level(
     let rows = maze.matrix.rows() as i32;
     let cols = maze.matrix.cols() as i32;
 
-    for i in (-LEVEL_MARGIN as i32)..(rows + LEVEL_MARGIN as i32) {
-        for j in (-LEVEL_MARGIN as i32)..(cols + LEVEL_MARGIN as i32) {
+    // itera sobre as dimensões do labirinto
+    for i in 0..rows {
+        for j in 0..cols {
             // calcula posição em pixels
             let x = j as f32 * LEVEL_SPRITE_SIZE.0 * LEVEL_SPRITE_SCALE;
             let y_range = (cols as f32 * (LEVEL_MARGIN + 1.0)) - (-cols as f32 * LEVEL_MARGIN);
@@ -44,56 +45,60 @@ pub fn spawn_level(
             let transform = Transform::from_translation(translation)
                 .with_scale(Vec3::new(LEVEL_SPRITE_SCALE, LEVEL_SPRITE_SCALE, LEVEL_SPRITE_SCALE));
 
-            // se posição estiver dentro da área do labirinto, spawna de acordo com o tipo
-            if i >= 0 && i < rows && j >= 0 && j < cols {
-                // associa número da matriz com o tipo de sprite
-                match *maze.matrix.get(i as usize, j as usize).unwrap() {
-                    // se 0, spawna textura no index 1 (parede)
-                    0 => {
-                        commands.spawn(SpriteSheetBundle {
-                            texture_atlas: level_sprite_sheet.0.to_owned(),
-                            sprite: TextureAtlasSprite::new(1),
-                            transform,
-                            ..default()
-                        });
-                    },
-                    // se 2, spawna textura no index 22 (chão) + um baú (84)
-                    2 => {
-                        commands.spawn(SpriteSheetBundle {
-                            texture_atlas: level_sprite_sheet.0.to_owned(),
-                            sprite: TextureAtlasSprite::new(22),
-                            transform,
-                            ..default()
-                        });
-                        let mut transform = transform.clone();
-                        transform.translation.z = -9.0;
-                        commands.spawn(SpriteSheetBundle {
-                            texture_atlas: level_sprite_sheet.0.to_owned(),
-                            sprite: TextureAtlasSprite::new(84),
-                            transform,
-                            ..default()
-                        });
-                    },
-                    // se qualquer outro número, spawna textura no index 22 (chão)
-                    _ => {
-                        commands.spawn(SpriteSheetBundle {
-                            texture_atlas: level_sprite_sheet.0.to_owned(),
-                            sprite: TextureAtlasSprite::new(22),
-                            transform,
-                            ..default()
-                        });
-                    },
-                }
-            }
-            
-            // se não, spawna textura da borda do labirinto (index 78)
-            else {
-                commands.spawn(SpriteSheetBundle {
-                    texture_atlas: level_sprite_sheet.0.to_owned(),
-                    sprite: TextureAtlasSprite::new(78),
-                    transform,
-                    ..default()
-                });
+            // associa elemento do labirinto com sprite
+            match *maze.matrix.get(i as usize, j as usize).unwrap() {
+                // se 0, spawna textura no index 4 (parede)
+                0 => {
+                    commands.spawn(SpriteSheetBundle {
+                        texture_atlas: level_sprite_sheet.0.to_owned(),
+                        sprite: TextureAtlasSprite::new(4),
+                        transform,
+                        ..default()
+                    });
+                },
+                // se 1, spawna textura no index 8 (chão)
+                1 => {
+                    commands.spawn(SpriteSheetBundle {
+                        texture_atlas: level_sprite_sheet.0.to_owned(),
+                        sprite: TextureAtlasSprite::new(8),
+                        transform,
+                        ..default()
+                    });
+                },
+                // se 2, spawna textura nos indices 8 (chão) e 1 (baú)
+                2 => {
+                    commands.spawn(SpriteSheetBundle {
+                        texture_atlas: level_sprite_sheet.0.to_owned(),
+                        sprite: TextureAtlasSprite::new(8),
+                        transform,
+                        ..default()
+                    });
+                    let mut transform = transform.clone();
+                    transform.translation.z = -9.0;
+                    commands.spawn(SpriteSheetBundle {
+                        texture_atlas: level_sprite_sheet.0.to_owned(),
+                        sprite: TextureAtlasSprite::new(1),
+                        transform,
+                        ..default()
+                    });
+                },
+                // se qualquer outro número, spawna texturas nos indices 8 (chão) e 9 (escada)
+                _ => {
+                    commands.spawn(SpriteSheetBundle {
+                        texture_atlas: level_sprite_sheet.0.to_owned(),
+                        sprite: TextureAtlasSprite::new(8),
+                        transform,
+                        ..default()
+                    });
+                    let mut transform = transform.clone();
+                    transform.translation.z = -9.0;
+                    commands.spawn(SpriteSheetBundle {
+                        texture_atlas: level_sprite_sheet.0.to_owned(),
+                        sprite: TextureAtlasSprite::new(9),
+                        transform,
+                        ..default()
+                    });
+                },
             }
         }
     }
