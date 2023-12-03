@@ -17,7 +17,11 @@ cargo run
 
 ## Algoritmos de busca
 
-A implementação dos algoritmos de busca encontram-se no subdiretório `python`, tanto o A* quanto o profundidade limitada.
+A implementação dos algoritmos de busca encontram-se no subdiretório `python`, tanto o A* quanto o busca em profundidade limitada.
+
+A heurística do A* é definida no código em Python (`a_star.py`), na linha 51.
+
+O limite do algoritmo de busca em pronfundidade limitada é definido no código em Python (`limited_depth.py`), na linha 70.
 
 ## Personalização do labirinto
 
