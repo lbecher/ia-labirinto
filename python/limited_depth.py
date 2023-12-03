@@ -42,18 +42,18 @@ def obter_vizinhos(labirinto, posicao):
     lin, col = posicao
     vizinhos = []
 
-    # Verifica para cima
-    if lin > 0:
-        vizinhos.append((lin - 1, col))
-    # Verifica para baixo
-    if lin < len(labirinto) - 1:
-        vizinhos.append((lin + 1, col))
     # Verifica à esquerda
     if col > 0:
         vizinhos.append((lin, col - 1))
+    # Verifica para baixo
+    if lin < len(labirinto) - 1:
+        vizinhos.append((lin + 1, col))
     # Verifica à direita
     if col < len(labirinto[0]) - 1:
         vizinhos.append((lin, col + 1))
+    # Verifica para cima
+    if lin > 0:
+        vizinhos.append((lin - 1, col))
 
     return vizinhos
 
