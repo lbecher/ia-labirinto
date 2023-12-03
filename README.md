@@ -25,6 +25,10 @@ O limite do algoritmo de busca em pronfundidade limitada é definido no código 
 
 ## Personalização do labirinto
 
+O labirinto é lido do arquivo `maze.txt`.
+
+Exemplos prontos de labirinto podem ser encontrados em `maze_options.txt`.
+
 O labirinto, representado por uma matriz de inteiros, pode ter qualquer tamanho, desde que respeite a representação inteira utilizada pelo Python (ou seja, 2147483648 por 2147483648). Além disso, o tamanho do labirinto deve respeitar a capacidade de memória da sua máquina. O tamanho do labirinto deve ser declarado na primeira linha do arquivo, no formato linha coluna.
 
 A matriz do labirinto é baseada na representação matricial de grafos, onde as paredes do labirinto (nodos desconexos) são representadas por 0, enquanto um caminho possível é representado por 1. Extendendo essa representação para adicionar algumas informações extras, temos:
@@ -35,8 +39,6 @@ A matriz do labirinto é baseada na representação matricial de grafos, onde as
 * 5: representa a mesma posição inicial tanto para Amelia quanto para Bob.
 
 Vale resaltar que, no código dos algoritmos de busca, as posições inicias dos players também são consideradas como nós válidos (equivalente a 1).
-
-O labirinto é lido do arquivo `maze.txt`.
 
 ### Exemplo 1
 
