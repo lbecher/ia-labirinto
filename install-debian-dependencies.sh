@@ -5,3 +5,7 @@ sudo apt install -y \
     libx11-dev libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
     
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+cargo install sccache
+
+echo "export RUSTC_WRAPPER=sccache" >> ~/.bashrc
