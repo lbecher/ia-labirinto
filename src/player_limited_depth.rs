@@ -184,7 +184,7 @@ pub fn spawn_limited_depth_player(
                 eprintln!("{}", err);
                 commands.spawn(
                     TextBundle::from_section(
-                        "Não foi possível inicializar o player Bob\nBusca em Profundidade Limitada",
+                        "Complexo demais. O Bob desistiu :(\nBusca em Profundidade Limitada",
                         text_style.clone(),
                     )
                     .with_text_alignment(TextAlignment::Left)

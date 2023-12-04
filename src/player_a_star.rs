@@ -183,7 +183,7 @@ pub fn spawn_a_star_player(
                 eprintln!("{}", err);
                 commands.spawn(
                     TextBundle::from_section(
-                        "Não foi possível inicializar o player Amelia\nA* (A Estrela)",
+                        "Complexo demais. A Amelia desistiu :(\nA* (A Estrela)",
                         text_style.clone(),
                     )
                     .with_text_alignment(TextAlignment::Left)
