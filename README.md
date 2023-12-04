@@ -33,9 +33,9 @@ O labirinto, representado por uma matriz de inteiros, pode ter qualquer tamanho,
 
 A matriz do labirinto é baseada na representação matricial de grafos, onde as paredes do labirinto (nodos desconexos) são representadas por 0, enquanto um caminho possível é representado por 1. Extendendo essa representação para adicionar algumas informações extras, temos:
 
-* 2: representa uma saída do labirinto;
+* 2: representa uma saída do labirinto (figurinha de baú);
 * 3: representa a posição inicial do player Amelia (A*);
-* 4: representa a posição inicial do player Bob (profundidade limitada);
+* 4: representa a posição inicial do player Bob (busca em profundidade limitada);
 * 5: representa a mesma posição inicial tanto para Amelia quanto para Bob.
 
 Vale resaltar que, no código dos algoritmos de busca, as posições inicias dos players também são consideradas como nós válidos (equivalente a 1).
@@ -64,7 +64,11 @@ Vale resaltar que, no código dos algoritmos de busca, as posições inicias dos
 0 0 0 3 0 4 0 0 0 0
 ```
 
-## Instalação de dependências para Debian/Ubuntu/Linux Mint
+## Controles
+
+Setas do teclado ou teclas W, S, A e D: movimentação da câmera. Manter tecla 1 pressionada: faz a câmera acompanhar Amelia (A*). Manter tecla 2 pressionada: faz a câmera acompanhar Bob (busca em profundidade limitada). Alt + F4 ou Qmd + Q: fecha a aplicação.
+
+## Instalação de dependências para Debian/Ubuntu/Linux Mint (já realizada na máquina de IA)
 
 Na pasta raiz do projeto (que contém o arquivo `install-debian-dependencies.sh`), execute os comandos:
 
