@@ -7,6 +7,8 @@ Alunos:
 * Matheus Lucas Ferreira Jacinto
 * Vinicius Sendoski de Andrade
 
+![Texto Alternativo](https://github.com/lbecher/ia-labirinto/blob/master/Trabalho_IA.png)
+
 ## Execução
 
 Na pasta raiz do projeto (que contém o arquivo `Cargo.toml`), execute o comando:
@@ -79,5 +81,3 @@ chmod +x install-debian-dependencies.sh
 ```
 ./install-debian-dependencies.sh
 ```
-
-![Texto Alternativo](https://github.com/lbecher/ia-labirinto/blob/master/Trabalho_IA.png)
